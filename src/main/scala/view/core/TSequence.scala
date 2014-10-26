@@ -1,4 +1,5 @@
 package freez
+package view
 package core
 
 trait TSequence[S[_[_, _], _, _]] {

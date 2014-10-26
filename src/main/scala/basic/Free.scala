@@ -6,7 +6,7 @@ import annotation.tailrec
 import scalaz.std.function._
 
 /** The very basic representation of Free */
-object Free extends CopoyoFunctions {
+object Free {
 
   /** Return from the computation with the given value. */
   case class Return[S[_], A](a: A) extends Free[S, A]
@@ -124,21 +124,5 @@ sealed abstract class Free[S[_], A] {
         override def cojoin[A](fa: Trampoline[A]) = Return(fa)
       }
 
-  }
-}
-
-trait CopoyoFunctions {
-  import scalaz.{Coyoneda, Functor, Unapply}
-  import shapeless.ops.coproduct.{Inject, Selector}
-  import shapeless.{Coproduct, Inl, Inr, CNil, :+:, Poly1, Id}
-  import shapeless.poly._
-
-  class Copoyo[C[_] <: Coproduct] {
-    def apply[F[_], A](fa: F[A])(implicit inj: Inject[C[A], F[A]]): Free.FreeC[C, A] =
-      Free.liftFC(Coproduct[C[A]](fa))
-  }
-
-  object Copoyo {
-    def apply[C[_] <: Coproduct] = new Copoyo[C]
   }
 }
