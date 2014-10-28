@@ -1,7 +1,7 @@
 package freez
 package view
-package tfingertree
-package `lazy`
+package scalaz
+package fingertree
 
 import annotation.tailrec
 
@@ -9,8 +9,7 @@ import core._
 
 
 object Free extends freez.view.Free {
-  import scalaz.{Monad, Functor, IndSeq}
-  import TFingerTree.TFingerTreeSeq
+  import _root_.scalaz.{Monad, Functor, IndSeq}
 
   type Deque[R[_, _], A, B] = IndSeq[Any]
 
@@ -23,13 +22,13 @@ object Free extends freez.view.Free {
       a ++ b
     }
 
-    def tviewl[C[_, _], X, Y](s: Deque[C, X, Y]): TViewl[Deque, C, X, Y] = {
+    def tviewl[C[_, _], X, Y](s: => Deque[C, X, Y]): TViewl[Deque, C, X, Y] = {
       val v = s.self.viewl
       v.headOption match {
         case None    => TViewl.EmptyL[Deque, C, X]().asInstanceOf[TViewl[Deque, C, X, Y]]
         case Some(h) => v.tailOption match {
-          case None     => TViewl.LeafL[Deque, C, X, Y, Y](h.asInstanceOf[C[X, Y]], IndSeq[Any]())
-          case Some(t)  => TViewl.LeafL[Deque, C, X, Any, Y](h.asInstanceOf[C[X, Any]], new IndSeq(t))
+          case None     => TViewl.LeafL[Deque, C, X, Y, Y](h.asInstanceOf[C[X, Y]], () => IndSeq[Any]())
+          case Some(t)  => TViewl.LeafL[Deque, C, X, Any, Y](h.asInstanceOf[C[X, Any]], () => new IndSeq(t))
         }
       }
 
