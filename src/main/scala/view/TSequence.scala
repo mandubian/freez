@@ -1,6 +1,5 @@
 package freez
 package view
-package core
 
 trait TSequence[S[_[_, _], _, _]] {
   def tempty[C[_, _], X]: S[C, X, X]

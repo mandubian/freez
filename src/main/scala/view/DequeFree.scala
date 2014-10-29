@@ -1,13 +1,12 @@
 package freez
 package view
-package core
 
 import annotation.tailrec
-import scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
+import _root_.scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
 
 import freez._
 
-abstract class DequeFree {
+abstract class DequeFree extends FreeCompanion {
 
   type Deque[R[_, _], A, B]
 

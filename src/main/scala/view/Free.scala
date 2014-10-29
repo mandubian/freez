@@ -2,14 +2,11 @@ package freez
 package view
 
 import annotation.tailrec
-import scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
-
-import core._
+import _root_.scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
+import _root_.scalaz.std.function._
 
 abstract class Free[S[_], A] {
-  import scalaz.std.function._
   import FreeView._
-  import Free._
 
   def map[B](f: A => B)(implicit M: Monad[({ type l[A] = Free[S, A] })#l]): Free[S, B] = M.map(this)(f)
 
@@ -31,10 +28,6 @@ abstract class Free[S[_], A] {
     }
   }
 
-  /** Runs a trampoline all the way to the end, tail-recursively. */
-  def run(implicit ev: Free[S, A] =:= Trampoline[A], V: FreeViewer[Free]): A = {
-    ev(this).go(_())
-  }
 
   /** Runs to completion, using a function that extracts the resumption from its suspension functor. */
   final def go(f: S[Free[S, A]] => Free[S, A])(implicit S: Functor[S], V: FreeViewer[Free]): A = {
@@ -50,7 +43,7 @@ abstract class Free[S[_], A] {
 }
 
 
-object Free {
+trait FreeCompanion {
 
   implicit def FreeMonad[S[_]](
     implicit  V: FreeViewer[Free], 
@@ -63,7 +56,7 @@ object Free {
 
   }
 
-  type FreeC[S[_], A] = Free[({type f[x] = scalaz.Coyoneda[S, x]})#f, A]
+  type FreeC[S[_], A] = Free[({type f[x] = Coyoneda[S, x]})#f, A]
 
   type Trampoline[A] = Free[Function0, A]
 
@@ -80,6 +73,13 @@ object Free {
 
   }
 
+  implicit class TrampolineOps[A](val tr: Trampoline[A]) {
+    /** Runs a trampoline all the way to the end, tail-recursively. */
+    def run(implicit V: FreeViewer[Free]): A = {
+      tr.go(_())
+    }
+  }
+
   type Source[A, B] = Free[({type f[x] = (A, x)})#f, B]
 
 
@@ -94,7 +94,7 @@ object Free {
     liftF(MA(value))(MA.TC, V)
 
   /** A free monad over a free functor of `S`. */
-  def liftFC[S[_], A](s: S[A])(implicit V: FreeViewer[Free]): Free.FreeC[S, A] =
+  def liftFC[S[_], A](s: S[A])(implicit V: FreeViewer[Free]): FreeC[S, A] =
     liftFU(Coyoneda lift s)
 
 }

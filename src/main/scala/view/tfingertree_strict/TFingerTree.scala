@@ -3,8 +3,6 @@ package view
 package tfingertree
 package strict
 
-import core._
-
 
 sealed abstract class Node[R[_, _], A, B] {
   def toDigit(): Digit[R, A, B]

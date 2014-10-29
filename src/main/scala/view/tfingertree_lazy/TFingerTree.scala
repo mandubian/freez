@@ -3,7 +3,6 @@ package view
 package tfingertree
 package `lazy`
 
-import core._
 
 sealed abstract class Node[R[_, _], A, B] {
   def toDigit(): Digit[R, A, B]

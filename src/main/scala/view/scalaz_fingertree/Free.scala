@@ -5,8 +5,6 @@ package fingertree
 
 import annotation.tailrec
 
-import core._
-
 
 object Free extends freez.view.Free {
   import _root_.scalaz.{Monad, Functor, IndSeq}

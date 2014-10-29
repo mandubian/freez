@@ -12,8 +12,6 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
   "Scalaz Free" should "left/right bind" in {
     import Free._
 
-    //val M = implicitly[Monad[Trampoline]]
-
     def gen[I](i: I): Trampoline[I] = {
       Suspend( () => Trampoline.done(i) )
     }
@@ -28,7 +26,7 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
 
     val testN = Seq[Int](
       1000
-      , 200000,   300000,   500000,   800000
+      , 200000, 300000, 500000, 800000
       // , 1000000,  2000000,  3000000,  5000000
       // , 10000000, 12000000, 15000000, 18000000
       // , 20000000, 30000000, 40000000  //, 50000000
@@ -36,25 +34,28 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
 
 
     println("Scalaz Free - Left Bind")
+    initFile("src/test/results/scalaz_free_left.txt", Seq("nb", "scalaz_free_left_bind"))
     testN foreach { n =>
-      testTime2(s"$n") { lftBind(n).run } should equal (n)
+      testTime2File(s"$n") { lftBind(n).run }
     }
+    closeFile()
 
     println("Scalaz Free - Right Bind")
+    initFile("src/test/results/scalaz_free_right.txt", Seq("nb", "scalaz_free_left_bind"))
     testN foreach { n =>
-      testTime2(s"$n") { rgtBind(n).run } should equal (n)
+      testTime2File(s"$n") { rgtBind(n).run }
     }
+    closeFile()
 
   }
 
 
-/*
-  "Strict Fixed Free" should "left/right bind" in {
-    import strict._
-  	import TFree._
-    import TFreeView._
 
-    //val M = TFreeMonad[Function0]
+  "Strict Fixed Free" should "left/right bind" in {
+    import freez.view._
+    import Free._
+  	import tfingertree.strict._
+    import FreeView._
 
     def gen[I](i: I): Trampoline[I] = {
       fromView(Impure[Function0, I]( () => Trampoline.done(i) ))
@@ -63,24 +64,11 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
     //(a flatMap (b flatMap (c flatMap (...))))
     def lftBind(n: Int) = {
       (1 to n).foldLeft(gen(0)){ case (acc, i) => acc flatMap { a => gen(i) } }
-      // @tailrec def step(i: Int, free: Trampoline[Int]): Trampoline[Int] = {
-      //   if(i <= n) step(i+1, free flatMap { a => gen(i) })
-      //   else free
-      // }
-
-      // step(0, gen(0))
     }
 
     // (... flatMap (_ => c flatMap (_ => b flatMap (_ => a))))
     def rgtBind(n: Int) = {
       (1 to n).foldLeft(gen(n)){ case (acc, i) => gen(n-i) flatMap { _ => acc } }
-      // (1 to n).foldRight(gen(n)){ case (i, acc) => gen(i) flatMap { a => acc } }
-      // @tailrec def step(i: Int, free: Trampoline[Int]): Trampoline[Int] = {
-      //   if(i > 0) step(i-1, gen(i) flatMap { _ => free })
-      //   else free
-      // }
-
-      // step(n, gen(n))
     }
 
     val testN = Seq[Int](
@@ -104,7 +92,7 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
 
 
   }
-*/
+
 /*
   "Lazy Fixed Free" should "left/right bind" in {
     import `lazy`._

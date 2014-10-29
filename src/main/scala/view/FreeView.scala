@@ -1,10 +1,7 @@
 package freez
 package view
-package core
 
-import scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
-
-import freez._
+import _root_.scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
 
 sealed abstract class FreeView[S[_], A]
 
