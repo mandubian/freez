@@ -1,4 +1,4 @@
-## Freez
+## Freez (Draft / Experimental)
 
 > This project is a sandbox to test other representations of Free Monads: serious representations but also funny, optimized, specific representations and whatever goes through your mind.
 
