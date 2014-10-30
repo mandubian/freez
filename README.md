@@ -1,6 +1,6 @@
 ## Freez
 
-> This project is a sandbox to test other representations of Free Monads: serious representations but also funny, optimized, specific representations and whatever goes through your head.
+> This project is a sandbox to test other representations of Free Monads: serious representations but also funny, optimized, specific representations and whatever goes through your mind.
 
 
 ### Observable Free
