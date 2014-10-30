@@ -19,7 +19,7 @@ trait Instrumented {
     writer.write(s"""$field,${t2-t1}\n""")
     r
   }
-  
+
   def testTime[A](name: String)(body: => A): A = {
     val t1 = System.currentTimeMillis()
     val r = body

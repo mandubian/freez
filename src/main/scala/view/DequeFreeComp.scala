@@ -6,7 +6,8 @@ import _root_.scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
 
 import freez._
 
-abstract class DequeFree extends FreeCompanion {
+abstract class DequeFreeComp extends FreeComp {
+  self =>
 
   type Deque[R[_, _], A, B]
 
@@ -15,6 +16,18 @@ abstract class DequeFree extends FreeCompanion {
 
   // The optimized representation of Free
   case class FM[S[_], X, A](head: FreeView[S, X], tail: FMExp[S, X, A]) extends Free[S, A]
+
+
+  implicit def FreeMonad[S[_]](
+    implicit  TS: TSequence[Deque],
+              V: FreeViewer[Free]
+  ) = new Monad[({ type l[A] = Free[S, A] })#l] {
+
+    def point[A](a: => A): Free[S, A] = V.fromView(FreeView.Pure(a))
+
+    def bind[A, B](fa: Free[S, A])(f: A => Free[S, B]): Free[S, B] = self.bind(fa)(f)
+
+  }
 
   implicit def viewer(implicit TS: TSequence[Deque]) = new FreeViewer[Free]{
 
