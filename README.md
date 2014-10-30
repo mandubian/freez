@@ -17,9 +17,7 @@ I've tried to make the code as generic as possible to be able to test this appro
 
 1. create a Free companion object extending `freez.view.DequeFreeComp`
 
-2. give a type `type Deque[R[_, _], A, B]`
-
-`R[A, B]` represents the monadic bind function `A => Free[S, B]`.
+2. give a type `type Deque[R[_, _], A, B]` (`R[A, B]` represents the monadic bind function `A => Free[S, B]`)
 
 3. implement an implicit `TSequence[Deque]`
 
