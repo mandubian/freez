@@ -1,6 +1,4 @@
-package freez
-package view
-package tfingertree
+package freez.view.tfingertree
 package `lazy`
 
 import annotation.tailrec

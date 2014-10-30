@@ -1,5 +1,4 @@
-package freez
-package view
+package freez.view
 
 import annotation.tailrec
 import _root_.scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
@@ -46,27 +45,27 @@ trait FreeComp {
 
   type FreeC[S[_], A] = Free[({type f[x] = Coyoneda[S, x]})#f, A]
 
-  // type Trampoline[A] = Free[Function0, A]
+  type Trampoline[A] = Free[Function0, A]
 
-  // object Trampoline {
+  object Trampoline {
 
-  //   def done[A](a: A)(implicit V: FreeViewer[Free]): Trampoline[A] =
-  //     V.fromView(FreeView.Pure[Function0, A](a))
+    def done[A](a: A)(implicit V: FreeViewer[Free]): Trampoline[A] =
+      V.fromView(FreeView.Pure[Function0, A](a))
 
-  //   def delay[A](a: => A)(implicit V: FreeViewer[Free]): Trampoline[A] =
-  //      suspend(done(a))
+    def delay[A](a: => A)(implicit V: FreeViewer[Free]): Trampoline[A] =
+       suspend(done(a))
 
-  //   def suspend[A](a: => Trampoline[A])(implicit V: FreeViewer[Free]): Trampoline[A] =
-  //     V.fromView(FreeView.Impure[Function0, A](() => a))
+    def suspend[A](a: => Trampoline[A])(implicit V: FreeViewer[Free]): Trampoline[A] =
+      V.fromView(FreeView.Impure[Function0, A](() => a))
 
-  // }
+  }
 
-  // implicit class TrampolineOps[A](val tr: Trampoline[A]) {
-  //   /** Runs a trampoline all the way to the end, tail-recursively. */
-  //   def run(implicit V: FreeViewer[Free]): A = {
-  //     tr.go(_())
-  //   }
-  // }
+  implicit class TrampolineOps[A](val tr: Trampoline[A]) {
+    /** Runs a trampoline all the way to the end, tail-recursively. */
+    def run(implicit V: FreeViewer[Free]): A = {
+      tr.go(_())
+    }
+  }
 
   type Source[A, B] = Free[({type f[x] = (A, x)})#f, B]
 

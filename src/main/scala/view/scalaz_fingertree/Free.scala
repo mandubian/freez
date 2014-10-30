@@ -6,7 +6,7 @@ package fingertree
 import annotation.tailrec
 
 
-object Free extends freez.view.Free {
+object Free extends freez.view.DequeFreeComp {
   import _root_.scalaz.{Monad, Functor, IndSeq}
 
   type Deque[R[_, _], A, B] = IndSeq[Any]

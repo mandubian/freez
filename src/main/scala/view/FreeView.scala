@@ -1,5 +1,4 @@
-package freez
-package view
+package freez.view
 
 import _root_.scalaz.{Monad, Functor, Coyoneda, Unapply, ~>}
 

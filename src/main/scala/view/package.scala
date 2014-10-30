@@ -1,6 +1,7 @@
 package freez
 
 import _root_.scalaz.std.function._
+import _root_.scalaz.Monad
 
 package object view {
   /** Facility to manipulate trampoline not only as an alias */
@@ -13,18 +14,24 @@ package object view {
 
   object FreeTrampoline {
 
-    implicit def monad[A](M: ({ type l[T] = Monad[Function0, T] })#l) = M
+    @inline implicit def monad[A](implicit M: Monad[({ type l[T] = Free[Function0, T] })#l]) = new Monad[FreeTrampoline] {
 
-    implicit def toFree[A](t: Trampoline[A]): Free[Function0, A] = t.free
+      def point[A](a: => A): FreeTrampoline[A] = M.point(a)
 
-    def done[A](a: A)(implicit V: FreeViewer[Free]): Trampoline[A] =
+      def bind[A, B](fa: FreeTrampoline[A])(f: A => FreeTrampoline[B]): FreeTrampoline[B] = M.bind(fa.free){ a => f(a).free }
+
+    }
+
+    implicit def toFree[A](t: FreeTrampoline[A]): Free[Function0, A] = t.free
+
+    def done[A](a: A)(implicit V: FreeViewer[Free]): FreeTrampoline[A] =
       V.fromView(FreeView.Pure[Function0, A](a))
 
-    def delay[A](a: => A)(implicit V: FreeViewer[Free]): Trampoline[A] =
+    def delay[A](a: => A)(implicit V: FreeViewer[Free]): FreeTrampoline[A] =
        suspend(done(a))
 
-    def suspend[A](a: => Trampoline[A])(implicit V: FreeViewer[Free]): Trampoline[A] =
-      V.fromView(FreeView.Impure[Function0, A](() => a))
+    def suspend[A](a: => FreeTrampoline[A])(implicit V: FreeViewer[Free]): FreeTrampoline[A] =
+      V.fromView(FreeView.Impure[Function0, A](() => a.free))
 
   }
 }
