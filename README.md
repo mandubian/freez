@@ -86,7 +86,7 @@ def odd[A](ns: List[A]): Trampoline[Boolean] = ns match {
 }
 ```
 
-
+> A few statistics coming soon...
 
 ### Other ideas? Don't hesitate to contribute
 
