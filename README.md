@@ -88,11 +88,13 @@ def odd[A](ns: List[A]): Trampoline[Boolean] = ns match {
 
 ### Performance Charts
 
-#### Recursive Left Binds [Charts](https://plot.ly/~mandubian/33)
+#### Recursive Left Binds - [Charts](https://plot.ly/~mandubian/34)
 
 ```scala
 (a flatMap (b flatMap (c flatMap (...))))
 ```
+
+It demonstrates the quadratic complexity of classic FreeMonads 
 
 <br/>
 <br/>
