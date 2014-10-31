@@ -94,7 +94,7 @@ def odd[A](ns: List[A]): Trampoline[Boolean] = ns match {
 (a flatMap (b flatMap (c flatMap (...))))
 ```
 
-https://plot.ly/~mandubian/33
+Chart: https://plot.ly/~mandubian/33
 
 <br/>
 <br/>
