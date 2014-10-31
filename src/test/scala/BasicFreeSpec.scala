@@ -10,10 +10,11 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
   import freez.view._
 
   val testN = Seq[Int](
+    1000, 1000,
     1000
     , 200000, 300000, 500000, 800000
-    // , 1000000,  2000000, 3000000, 5000000
-    // , 10000000 //, 12000000, 15000000, 18000000
+    , 1000000,  2000000, 3000000, 5000000
+    , 10000000, 12000000, 15000000 //, 18000000
     // , 20000000, 30000000, 40000000, 50000000
   )
 
@@ -54,13 +55,13 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
 
     def work(name: String) = {
       println(s"$name - Left Bind")
-      initFile(s"src/test/results/${name}_left.txt", Seq("nb", s"${name}_left"))
+      initFile(s"src/test/results/${System.currentTimeMillis()}_${name}_left.txt", Seq("nb", s"${name}_left"))
       testN foreach { n =>
         testTime2File(s"$n") { lftBind(n)(gen _).run }
       }
       closeFile()
 
-      println(s"$name - Right Bind")
+      /*println(s"$name - Right Bind")
       initFile(s"src/test/results/${name}_right.txt", Seq("nb", s"${name}_right"))
       testN foreach { n =>
         testTime2File(s"$n") { rgtBind(n)(gen _).run }
@@ -81,7 +82,7 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
         val l = List.fill(n)(0)
         testTime2File(s"$n") { even(0 +: l).run }
       }
-      closeFile()
+      closeFile()*/
     }
   }
 
@@ -105,13 +106,13 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
     }
 
     println("Scalaz Free - Left Bind")
-    initFile("src/test/results/scalaz_free_left.txt", Seq("nb", "scalaz_free_left"))
+    initFile(s"src/test/results/${System.currentTimeMillis()}_scalaz_free_left.txt", Seq("nb", "scalaz_free_left"))
     testN foreach { n =>
       testTime2File(s"$n") { lftBind(n)(gen _).run }
     }
     closeFile()
 
-    println("Scalaz Free - Right Bind")
+    /*println("Scalaz Free - Right Bind")
     initFile("src/test/results/scalaz_free_right.txt", Seq("nb", "scalaz_free_left"))
     testN foreach { n =>
       testTime2File(s"$n") { rgtBind(n)(gen _).run }
@@ -132,10 +133,10 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
       val l = List.fill(n)(0)
       testTime2File(s"$n") { even(0 +: l).run }
     }
-    closeFile()
+    closeFile()*/
   }
 
-
+/*
   "TFree Strict Free" should "left/right/odd/even" in {
     import freez.view._
     import FreeView._
@@ -174,5 +175,5 @@ class BasicFreeSpec extends FlatSpec with Matchers with Instrumented {
 
     work("ftree_scalaz_free")
   }
-
+*/
 }

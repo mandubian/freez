@@ -16,7 +16,7 @@ trait Instrumented {
     val t1 = System.currentTimeMillis()
     val r = body
     val t2 = System.currentTimeMillis()
-    writer.write(s"""$field,${t2-t1}\n""")
+    writer.write(s"""$field       ,${t2-t1}\n""")
     r
   }
 
