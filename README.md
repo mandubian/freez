@@ -86,7 +86,15 @@ def odd[A](ns: List[A]): Trampoline[Boolean] = ns match {
 }
 ```
 
-#### A few statistics/charts coming soon...
+### Performance Charts
+
+#### Recursive Left Binds
+
+```scala
+(a flatMap (b flatMap (c flatMap (...))))
+```
+
+https://plot.ly/~mandubian/33
 
 <br/>
 <br/>
